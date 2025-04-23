@@ -15,16 +15,15 @@ body {
     font-size: 3em;
     color: #d32f2f;
 }
-.yes-button {
+.submit {
     padding: 10px 20px;
-    margin-right: 10px;
     background-color: #50C878;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
   }
-  .no-button {
+  .specialnobutton {
     padding: 10px 20px;
     background-color: #f44336;
     color: white;
@@ -38,5 +37,6 @@ body {
     height: auto; 
 }
 form{
+  margin-top: 15px;
   font-size: 1.5em;
 }
