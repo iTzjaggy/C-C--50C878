@@ -7,48 +7,31 @@
     <link rel="stylesheet" href="./yes_style.css">
 </head>
 <body>
-    <div class="container">
-        <h1 class="header_text">The beatiful girl's name, When, Where, and Seriously?</h1>
-        <div class="forms>
-          
-            
-               
-            
-               
-            </form>
-            <div id="responseContainer" style="text-align: center; margin-top: 10px;"></div>
-
-            <form id="dataForm" >
-                <br>
-                    <label for="specialName">Name: </label>
-                    
-                    <input type="text" id="specialName" placeholder="Enter name" required>
-                    <br>
-                    <label for="date">When:</label>
-                    <input type="text" id="date" name="date" placeholder="Enter date" required>
-                    <br>
-                    <label for="location">Where:</label>
-                    <input type="text" id="location" name="location" placeholder="Enter location" required>
-                <br>
-                    <label>
-                        <input type="checkbox" id="serious" name="serious"> Be serious please
-                    </label>
-                    
-                    <div class="button-container">
-                        <button type="submit" class="btn">Submit</button>
-                        <button class="specialnobutton"  type="button"  onclick="handleNoClick()">No</button>
-                    </div>
-               
-            </form>
-            <div id="responseContainer"></div>
-       
-        </div>
-      
+  <div class="container">
+    <form id="dataForm">
+        <label for="specialName">My special someone's name:</label>
+        <input type="text" id="specialName" name="specialName" placeholder="Enter name" required>
         
-    </div>
-    <script src="jscript3.js">
+        <label for="date">When:</label>
+        <input type="text" id="date" name="date" placeholder="Enter date" required>
+        
+        <label for="location">Where:</label>
+        <input type="text" id="location" name="location" placeholder="Enter location" required>
 
-const form = document.getElementById('dataForm');
+        <label>
+            <input type="checkbox" id="serious" name="serious"> Be serious please
+        </label>
+
+        <div class="button-container">
+            <button type="submit" class="btn yes-button">Submit</button>
+            <button type="button" class="specialnobutton">No</button>
+        </div>
+    </form>
+    <div id="responseContainer" style="text-align: center; margin-top: 10px;"></div>
+  </div>
+        
+    <script>
+        const form = document.getElementById('dataForm');
         const container = document.getElementById('responseContainer');
         const scriptURL = "https://script.google.com/u/0/home/projects/15acXBLlTBAjL2qAbXb8uu_biHIE7Ea7PoUWcxW4Rodh_xg70aasAHB31/edit"; // Replace with your Apps Script Web App URL
 
@@ -56,16 +39,20 @@ const form = document.getElementById('dataForm');
             event.preventDefault(); // Prevent form refresh
             const formData = new FormData(form);
 
+            // Send all input data to Apps Script Web App
             fetch(scriptURL, {
                 method: 'POST',
-                body: JSON.stringify({ name: formData.get('Her name') }),
-                body: JSON.stringify({ name: formData.get('When') }),
-                body: JSON.stringify({ name: formData.get('Where') }), // Send form data to Apps Script
+                body: JSON.stringify({
+                    specialName: formData.get('specialName'),  // Extract "special someone's name"
+                    when: formData.get('date'),               // Extract "When"
+                    where: formData.get('location'),          // Extract "Where"
+                    serious: formData.has('serious')          // Check if "Be serious please" checkbox is selected
+                }),
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(response => response.json())
             .then(data => {
-                container.textContent = data.message; // Show success message
+                container.textContent = data.message; // Display server's response
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -73,6 +60,60 @@ const form = document.getElementById('dataForm');
             });
         });
 
+        // Check for updates
+        (async function checkForUpdates() {
+            const currentVersion = "1.0";
+            const versionUrl = "https://raw.githubusercontent.com/ivysone/Will-you-be-my-Valentine-/main/version.json"; 
+
+            try {
+                const response = await fetch(versionUrl);
+                if (!response.ok) {
+                    console.warn("Could not fetch version information.");
+                    return;
+                }
+                const data = await response.json();
+                const latestVersion = data.version;
+                const updateMessage = data.updateMessage;
+
+                if (currentVersion !== latestVersion) {
+                    alert(updateMessage);
+                } else {
+                    console.log("You are using the latest version.");
+                }
+            } catch (error) {
+                console.error("Error checking for updates:", error);
+            }
+        })();
+
+        // Handle No button clicks
+        const messages = [
+            "Are you sure?",
+            "If you say no, I will be really sad...",
+            "I will be very sad...",
+            "I'm sorry if I'm being annoying...",
+            "\uD83D\uDE22 You may leave now, bai bai"
+        ];
+
+        let messageIndex = 0;
+
+        function handleNoClick() {
+            const noButton = document.querySelector('.no-button');
+            const yesButton = document.querySelector('.yes-button');
+
+            noButton.textContent = messages[messageIndex];
+            messageIndex = (messageIndex + 1) % messages.length;
+
+            // Increase the size of the "Yes" button
+            const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
+            yesButton.style.fontSize = `${currentSize * 1.1}px`;
+        }
+
+        function handleYesClick() {
+            window.location.href = "yes_page2.html";
+        }
+
+        document.querySelector('.no-button').addEventListener('click', handleNoClick);
+        document.querySelector('.yes-button').addEventListener('click', handleYesClick);
     </script>
 </body>
 </html>
