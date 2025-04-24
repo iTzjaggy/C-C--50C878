@@ -61,7 +61,11 @@ body {
     border-radius: 5px;
     cursor: pointer;
   }
-  
+  p{
+      Text: 24px;
+      Color: Dark red;
+      
+  }
 
 .gif_container img {
     width: 100%; 
