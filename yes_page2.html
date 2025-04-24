@@ -8,38 +8,71 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="header_text">When, Where, and Seriously?</h1>
+        <h1 class="header_text">The beatiful girl's name, When, Where, and Seriously?</h1>
         <div class="forms>
-            <form action="https://itzjaggy.github.io/CC-50C878/" method="POST">
-        
-
-                <label for="Her name"><strong>My special someone's name: </strong> </label>
-                <br>
-                <input class="anws"type="text" name="Her name"  required>
-                <br>
-
-                <label for="When"><strong>When:</strong> </label>
-                <br>
-                <input class="anws"type="text" name="When"  required>
-                <br>
-
-                <label for="Where"><strong>Where: </strong></label>
-                <br>
-                <input class="anws"type="text" name="Where"  required>
-                <br>
-
-                <input type="checkbox" checked="checked" name="remember"> <strong>Be serious please</strong>
-                <br>
-                <input class="submit" type="submit" value="ARE YOU REALLY SURE?">
-                <br>
-                    <button class="specialnobutton" onclick="handleNoClick()">No</button>
-                    
-
+          
+            
+               
+            
+               
             </form>
+            <div id="responseContainer" style="text-align: center; margin-top: 10px;"></div>
+
+            <form id="dataForm" >
+                <br>
+                    <label for="specialName">Name: </label>
+                    
+                    <input type="text" id="specialName" placeholder="Enter name" required>
+                    <br>
+                    <label for="date">When:</label>
+                    <input type="text" id="date" name="date" placeholder="Enter date" required>
+                    <br>
+                    <label for="location">Where:</label>
+                    <input type="text" id="location" name="location" placeholder="Enter location" required>
+                <br>
+                    <label>
+                        <input type="checkbox" id="serious" name="serious"> Be serious please
+                    </label>
+                    
+                    <div class="button-container">
+                        <button type="submit" class="btn">Submit</button>
+                        <button class="specialnobutton"  type="button" class="btn" onclick="handleNoClick()">No</button>
+                    </div>
+               
+            </form>
+            <div id="responseContainer"></div>
+       
         </div>
       
         
     </div>
-    <script src="jscript3.js"></script>
+    <script src="jscript3.js">
+
+const form = document.getElementById('dataForm');
+        const container = document.getElementById('responseContainer');
+        const scriptURL = "https://script.google.com/u/0/home/projects/15acXBLlTBAjL2qAbXb8uu_biHIE7Ea7PoUWcxW4Rodh_xg70aasAHB31/edit"; // Replace with your Apps Script Web App URL
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent form refresh
+            const formData = new FormData(form);
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify({ name: formData.get('Her name') }),
+                body: JSON.stringify({ name: formData.get('When') }),
+                body: JSON.stringify({ name: formData.get('Where') }), // Send form data to Apps Script
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                container.textContent = data.message; // Show success message
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                container.textContent = "An error occurred. Please try again.";
+            });
+        });
+
+    </script>
 </body>
 </html>
