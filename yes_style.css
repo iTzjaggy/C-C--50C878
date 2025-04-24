@@ -22,6 +22,7 @@ body {
   justify-content: center; /* Align buttons horizontally */
   gap: 10px; /* Add spacing between buttons */
   margin-top: 10px; /* Space between buttons and other elements */
+    margin-bottom: 10px;
 }
 
 .btn {
